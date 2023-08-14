@@ -13,7 +13,7 @@ static const unsigned int gappih    = 10;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
-static const int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
+static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const Bool viewontag         = True;     /* Switch view on tag switch */
@@ -81,7 +81,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+//static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = {"rofi", "-show", "drun", NULL};
 static const char *termcmd[]  = { "alacritty", NULL };
 static const char *browsercmd[]  = { "google-chrome-stable", NULL };
 static const char *steamcmd[] = {"steam", NULL};
@@ -91,20 +92,14 @@ static const char *upvol[]   = { "amixer","sset", "Master", "5%+",  NULL };
 static const char *downvol[] = { "amixer","sset", "Master", "5%-",  NULL };
 static const char *mutevol[] = { "amixer","sset", "Master", "mute",  NULL };
 static const char *unmutevol[] = { "amixer","sset", "Master", "unmute",  NULL };
+static const char *unmutespeak[] = { "amixer","sset", "Speak", "unmute",  NULL };
 static const char *touchpadup[] = { "xinput","set-prop", "11", "156","1",  NULL };
 static const char *touchpaddown[] = { "xinput","set-prop", "11", "156","0",  NULL };
-static const char *lightup[] = { "/home/xiaozhai/Document/script/lightup.sh",  NULL };
-static const char *lightdown[] = { "/home/xiaozhai/Document/script/lightdown.sh",  NULL };
+static const char *lightup[] = { "light", "-A", "10",  NULL };
+static const char *lightdown[] = { "light", "-U", "10",  NULL };
 
-static const char *wpcmd[]  = { "/home/david/scripts/wp-change.sh", NULL };
-static const char *sktogglecmd[]  = { "/home/david/scripts/sck-tog.sh", NULL };
 static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "80x24", NULL };
-
-static const char *setcolemakcmd[]  = { "/home/david/scripts/setxmodmap-colemak.sh", NULL };
-static const char *setqwertycmd[]  = { "/home/david/scripts/setxmodmap-qwerty.sh", NULL };
-
-static const char *suspendcmd[]  = { "/home/david/scripts/suspend.sh", NULL };
 
 static const char *screenshotcmd[] = { "flameshot", "gui", NULL };
 
@@ -115,20 +110,16 @@ static Key keys[] = {
 	{ MODKEY,              XK_c,                    spawn,          {.v = browsercmd } },
 	{ MODKEY,    	       XK_g,                    spawn,          {.v = backgroundcmd} },
 	{ MODKEY|ShiftMask,    XK_s,                    spawn,          {.v = steamcmd } },
-	{ MODKEY|ShiftMask,    XK_w,                    spawn,          {.v = setqwertycmd } },
-	{ MODKEY|ShiftMask,    XK_m,                    spawn,          {.v = setcolemakcmd } },
-	{ MODKEY|ShiftMask,    XK_p,                    spawn,          {.v = suspendcmd } },
-	{ MODKEY|ControlMask,  XK_s,                    spawn,          {.v = sktogglecmd } },
 	{ 0,                   XF86XK_AudioLowerVolume, spawn,          {.v = downvol } },
 	{ 0,                   XF86XK_AudioMute,        spawn,          {.v = mutevol } },
 	{ 0|MODKEY,            XF86XK_AudioMute,        spawn,          {.v = unmutevol } },
+	{ 0|ShiftMask,         XF86XK_AudioMute,        spawn,          {.v = unmutespeak} },
 	{ 0,                   XF86XK_AudioRaiseVolume, spawn,          {.v = upvol   } },
-	{ 0,		           XF86XK_MonBrightnessUp,  spawn,          {.v = lightup} },
+	{ 0,		           XF86XK_MonBrightnessUp,	spawn,          {.v = lightup} },
 	{ 0,		           XF86XK_MonBrightnessDown,spawn,          {.v = lightdown} },
 	{ MODKEY,              XK_bracketleft,          spawn,          {.v = downvol } },
 	{ MODKEY,              XK_backslash,            spawn,          {.v = mutevol } },
 	{ MODKEY,              XK_bracketright,         spawn,          {.v = upvol   } },
-	{ MODKEY,              XK_b,                    spawn,          {.v = wpcmd } },
 	{ 0,                   XK_Print,                spawn,          {.v = screenshotcmd } },
 	{ MODKEY|ShiftMask,    XK_e,                    rotatestack,    {.i = +1 } },
 	{ MODKEY|ShiftMask,    XK_u,                    rotatestack,    {.i = -1 } },
